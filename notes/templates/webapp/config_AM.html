@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui container">
+    <h4 class="ui dividing header">Einstellungen Arbeitsmonat</h4>
+    <form class="ui form" method="POST" >
+        <div class="field">
+            <label>Datum</label>
+            <input placeholder="{{ am.year }}/{{ am.month }}" readonly="" type="text">
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Stunden pro Tag</label>
+                <input type="text" name="hpdAM" value="{{ am.hours_per_day }}">
+            </div>
+            <div class="field">
+                <label>Stellenprozent</label>
+                <input type="text" name="wpAM" value="{{ am.work_percentage * 100 }}">
+            </div>
+        </div>
+        <button class="ui primary button" type="submit" style="float: right;">Aktualisieren</button>
+        <a href="{{ url_for('webapp.view_AM', year=am.year, month=am.month) }}">
+            <button class="ui button" type="button" style="float: right;">Zurück</button>
+        </a>
+    </form>
+</div>
+{% endblock %}

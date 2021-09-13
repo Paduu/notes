@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="ui center aligned header">Welcome!</h3>
+<div class="ui middle aligned center aligned container">
+    <div class="ui two column stackable center aligned grid segment">
+        <div class="column">
+            <a href="{{ url_for('webapp.index_AM') }}">
+                <div class="purple ui huge button">Arbeitszeit</div>
+            </a>
+        </div>
+        <div class="ui vertical divider">or</div>
+        <div class="column">
+          <a href="{{ url_for('webapp.view_Notes') }}">
+            <div class="teal ui huge button">Notizen</div>
+          </a>
+        </div>
+      </div>
+</div>
+{% endblock %}

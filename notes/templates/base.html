@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Notes Tool</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    {% block header %}{% endblock %}
+  </head>
+  <body>
+    <div class="ui inverted top attached menu" style="background-color: #326fa8;">
+      <a href="{{ url_for('webapp.index') }}" class="item">
+        <i class="home icon"></i>
+        Home
+      </a>
+      <a href="{{ url_for('webapp.index_AM') }}" class="item">
+        <i class="table icon"></i>
+        Arbeitszeit
+      </a>
+      <a href="{{ url_for('webapp.add_AT') }}" class="item">
+        <i class="plus circle icon"></i>
+        Arbeitstag
+      </a>
+      <a href="{{ url_for('webapp.view_Notes') }}" class="item">
+        <i class="sticky note outline icon"></i>
+        Notizen
+      </a>
+      <a href="{{ url_for('webapp.add_Note') }}" class="item">
+        <i class="plus circle icon"></i>
+        Neue Notiz
+      </a>
+    </div>
+    <div class="ui grid buffer" style="height:3em;"></div>
+    {% block content %}{% endblock %}
+  </body>
+</html>

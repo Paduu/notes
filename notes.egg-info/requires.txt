@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+flask-restful
+Flask-HTTPAuth
+flask-wtf
+email_validator
