@@ -15,6 +15,7 @@ from datetime import date
 from dateutil import relativedelta
 from sqlalchemy import extract
 from functools import wraps
+import os
 
 webapp_bp = Blueprint('webapp', __name__, url_prefix='/webapp')
 
@@ -32,9 +33,11 @@ def login():
     if request.method == 'GET':
         return render_template('webapp/login.html')
     else:
-        if request.form['access_key'] == Config.APP_ACCESS_KEY:
+        if request.form['access_key'] == os.environ.get('APP_ACCESS_KEY'):
             session['logged_in'] = True
             return redirect(url_for('webapp.index'))
+        else:
+            return render_template('webapp/login.html'), 401
 
 @webapp_bp.route('/logout')
 def logout():
@@ -50,7 +53,7 @@ def index():
 @auth_required
 def index_AM():
     today = date.today()
-    return(redirect(url_for('webapp.view_AM', year=today.year, month=today.month)))
+    return redirect(url_for('webapp.view_AM', year=today.year, month=today.month))
 
 
 @webapp_bp.route('/arbeitszeit/<year>/<month>')
@@ -100,7 +103,7 @@ def add_AT():
                 t.at = data
                 db.session.add(t)
         db.session.commit()
-        return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
+        return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/edit/<id>',  methods=['POST', 'GET'])
 @auth_required
@@ -130,7 +133,7 @@ def edit_AT(id):
                 t.at = data
                 db.session.add(t)
         db.session.commit()
-        return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
+        return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/config/<year>/<month>',  methods=['POST', 'GET'])
 @auth_required
@@ -143,7 +146,7 @@ def edit_AM(year, month):
         am.work_percentage = float(request.form['wpAM']) / 100
         am.calc()
         db.session.commit()
-        return(redirect(url_for('webapp.view_AM', year=am.year, month=am.month)))
+        return redirect(url_for('webapp.view_AM', year=am.year, month=am.month))
 
 @webapp_bp.route('/arbeitszeit/delete/<id>')
 @auth_required
@@ -151,7 +154,7 @@ def delete_AT(id):
     data = AT.query.filter_by(day=id).first()
     db.session.delete(data)
     db.session.commit()
-    return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
+    return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/task/delete/<id>')
 @auth_required
@@ -159,7 +162,7 @@ def delete_AT_TASK(id):
     data = AT_TASK.query.filter_by(id=id).first()
     db.session.delete(data)
     db.session.commit()
-    return(redirect(url_for('webapp.edit_AT', id=request.args.get('atId'))))
+    return redirect(url_for('webapp.edit_AT', id=request.args.get('atId')))
 
 
 @webapp_bp.route('/notes')
@@ -177,7 +180,7 @@ def add_Note():
         newNote = Notes(title=request.form['title'], note=request.form['note'])
         db.session.add(newNote)
         db.session.commit()
-        return(redirect(url_for('webapp.view_Notes')))
+        return redirect(url_for('webapp.view_Notes'))
 
 @webapp_bp.route('/notes/edit/<id>', methods=['POST', 'GET'])
 @auth_required
@@ -189,7 +192,7 @@ def edit_Note(id):
         data.title = request.form['title']
         data.note = request.form['note']
         db.session.commit()
-        return(redirect(url_for('webapp.view_Notes')))
+        return redirect(url_for('webapp.view_Notes'))
 
 @webapp_bp.route('/notes/delete/<id>')
 @auth_required
@@ -197,5 +200,5 @@ def delete_Note(id):
     data = Notes.query.filter_by(id=id).first()
     db.session.delete(data)
     db.session.commit()
-    return(redirect(url_for('webapp.view_Notes')))
+    return redirect(url_for('webapp.view_Notes'))
 
