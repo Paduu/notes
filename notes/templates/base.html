@@ -15,7 +15,7 @@
     {% block header %}{% endblock %}
   </head>
   <body>
-    <div class="ui inverted top attached menu" style="background-color: #326fa8;">
+    <div class="ui stackable inverted top attached menu" style="background-color: #326fa8;">
       <a href="{{ url_for('webapp.index') }}" class="item">
         <i class="home icon"></i>
         Home
@@ -36,6 +36,14 @@
         <i class="plus circle icon"></i>
         Neue Notiz
       </a>
+      {% if session['logged_in'] %}
+      <div class="right menu">
+        <a href="{{ url_for('webapp.logout') }}" class="item">
+          <i class="sign out alternate icon"></i>
+          Logout
+        </a>
+      </div>
+      {% endif %}
     </div>
     <div class="ui grid buffer" style="height:3em;"></div>
     {% block content %}{% endblock %}

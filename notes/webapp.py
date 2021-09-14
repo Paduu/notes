@@ -14,22 +14,47 @@ from .config import Config
 from datetime import date
 from dateutil import relativedelta
 from sqlalchemy import extract
+from functools import wraps
 
 webapp_bp = Blueprint('webapp', __name__, url_prefix='/webapp')
 
-# tempDB = []
+def auth_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if session.get('logged_in'):
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('webapp.login'))
+    return wrapper
+
+@webapp_bp.route('/login',  methods=['POST', 'GET'])
+def login():
+    if request.method == 'GET':
+        return render_template('webapp/login.html')
+    else:
+        if request.form['access_key'] == Config.APP_ACCESS_KEY:
+            session['logged_in'] = True
+            return redirect(url_for('webapp.index'))
+
+@webapp_bp.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('webapp.index'))
 
 @webapp_bp.route('/')
+@auth_required
 def index():
     return render_template('webapp/index.html')
 
 @webapp_bp.route('/arbeitszeit')
+@auth_required
 def index_AM():
     today = date.today()
     return(redirect(url_for('webapp.view_AM', year=today.year, month=today.month)))
 
 
 @webapp_bp.route('/arbeitszeit/<year>/<month>')
+@auth_required
 def view_AM(year, month):
     d = date(int(year), int(month), 1)
     am = AM.query.filter_by(year=d.year, month=d.month).first()
@@ -49,6 +74,7 @@ def view_AM(year, month):
     return render_template('webapp/view_AM.html', data=data, total=total, am=am, mprev=mprev, mnext=mnext)
 
 @webapp_bp.route('/arbeitszeit/add',  methods=['POST', 'GET'])
+@auth_required
 def add_AT():
     if request.method == 'GET':
         return render_template('webapp/add_AT.html')
@@ -77,6 +103,7 @@ def add_AT():
         return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
 
 @webapp_bp.route('/arbeitszeit/edit/<id>',  methods=['POST', 'GET'])
+@auth_required
 def edit_AT(id):
     data = AT.query.filter_by(day=id).first()
     if request.method == 'GET':
@@ -106,6 +133,7 @@ def edit_AT(id):
         return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
 
 @webapp_bp.route('/arbeitszeit/config/<year>/<month>',  methods=['POST', 'GET'])
+@auth_required
 def edit_AM(year, month):
     am = AM.query.filter_by(year=year, month=month).first()
     if request.method == 'GET':
@@ -118,6 +146,7 @@ def edit_AM(year, month):
         return(redirect(url_for('webapp.view_AM', year=am.year, month=am.month)))
 
 @webapp_bp.route('/arbeitszeit/delete/<id>')
+@auth_required
 def delete_AT(id):
     data = AT.query.filter_by(day=id).first()
     db.session.delete(data)
@@ -125,6 +154,7 @@ def delete_AT(id):
     return(redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month)))
 
 @webapp_bp.route('/arbeitszeit/task/delete/<id>')
+@auth_required
 def delete_AT_TASK(id):
     data = AT_TASK.query.filter_by(id=id).first()
     db.session.delete(data)
@@ -133,11 +163,13 @@ def delete_AT_TASK(id):
 
 
 @webapp_bp.route('/notes')
+@auth_required
 def view_Notes():
     data = Notes.query.all()
     return render_template('webapp/view_Notes.html', data=data)
 
 @webapp_bp.route('/notes/add', methods=['POST', 'GET'])
+@auth_required
 def add_Note():
     if request.method == 'GET':
         return render_template('webapp/add_Note.html')
@@ -148,6 +180,7 @@ def add_Note():
         return(redirect(url_for('webapp.view_Notes')))
 
 @webapp_bp.route('/notes/edit/<id>', methods=['POST', 'GET'])
+@auth_required
 def edit_Note(id):
     data = Notes.query.filter_by(id=id).first()
     if request.method == 'GET':
@@ -159,6 +192,7 @@ def edit_Note(id):
         return(redirect(url_for('webapp.view_Notes')))
 
 @webapp_bp.route('/notes/delete/<id>')
+@auth_required
 def delete_Note(id):
     data = Notes.query.filter_by(id=id).first()
     db.session.delete(data)

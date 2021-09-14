@@ -12,3 +12,4 @@ class Config:
     # WebApp Settings
     APP_WORKDAY_HOURS = 8
     APP_WORK_PERCENTAGE = 0.9
+    APP_ACCESS_KEY = "changeme"
