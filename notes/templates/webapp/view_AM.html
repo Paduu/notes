@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#progress1').progress();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<h2 class="ui center aligned header">Erfasste Arbeitszeit</h2>
+<div class="ui middle aligned container">
+    <div class="ui divider"></div>
+    <div class="ui grid">
+        <div class="eight wide column">
+            <a href="{{ url_for('webapp.view_AM', year=mprev.year, month=mprev.month) }}">
+                <i class="angle double left icon"></i>
+                Prev
+            </a>
+        </div>
+        <div class="eight wide column right aligned">
+            <a href="{{ url_for('webapp.view_AM', year=mnext.year, month=mnext.month) }}">
+                Next
+                <i class="angle double right icon"></i>
+            </a>
+        </div>
+    </div>
+    <h4 class="left aligned">Übersicht Monat</h4>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Anzahl Arbeitstage</th>
+                <th>SOLL Std./Tag</th>
+                <th>Arbeitspensum</th>
+                <th>SOLL Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ am.year }}/{{ am.month }}</td>
+                <td>{{ am.workdays}}</td>
+                <td>{{ am.total_hours_per_day }}</td>
+                <td>{{ am.work_percentage * 100 }}%</td>
+                <td>{{ am.total_worktime_month }}</td>
+                <td>
+                    <a href="{{ url_for('webapp.edit_AM', year=am.year, month=am.month) }}">
+                        <i class="cog icon"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Begin Arbeitszeit</th>
+                <th>Ende Arbeitszeit</th>
+                <th>Mittagspause</th>
+                <th><i>Total</i></th>
+                <th></th>
+            </tr>
+        </thead> 
+        <tbody>
+        {% for e in data %}
+            <tr>
+                <td>{{ e.day.strftime('%A')}}, {{ e.day }}</td>
+                <td>{{ e.getStart() }}</td>
+                <td>{{ e.getEnd() }}</td>
+                <td>{{ e.lunch_time }}</td>
+                <td>{{ e.calc() }}</td>
+                <td>
+                    <a href="{{ url_for('webapp.edit_AT', id=e.day) }}">
+                        <i class="edit icon"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>{{ total }}</b></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="ui teal progress" data-value="{{ total }}" data-total="{{ am.total_worktime_month }}" id="progress1" onload="showProgress">
+        <div class="bar">
+          <div class="progress"></div>
+        </div>
+        <div class="label">Fortschritt Arbeitszeit</div>
+      </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="ui center aligned header">Erfasste Notizen</h2>
+<div class="ui container">
+    <div class="ui divider"></div>
+    <div class="ui four cards">
+        {% for e in data %}
+        <div class="ui card">
+            <div class="content">
+                <a class="header" href="{{ url_for('webapp.edit_Note', id=e.id) }}">{{ e.title }}</a>
+                <div class="meta">
+                    <span class="date">Erstellt am {{ e.created.strftime('%Y-%m-%d') }}</span>
+                </div>
+                <div class="description">{{ e.note[:255] }}</div>
+            </div>
+            <div class="extra content">
+                <div class="right floated">
+                    <a href="{{ url_for('webapp.edit_Note', id=e.id) }}">
+                        <i class="edit icon"></i>
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- <div class="ui right aligned container">
+    <a href="{{ url_for('webapp.add_Note') }}" class="item">
+        <button class="ui icon button">
+            <i class="plus circle icon"></i>
+            Neue Notiz
+        </button>
+
+      </a>
+</div> -->
+{% endblock %}

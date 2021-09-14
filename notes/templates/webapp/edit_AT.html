@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block header %}
+<appdata name="existing_tasks" content="{{ data.tasks.__len__() }}" />
+<script type="text/javascript">
+    $(document).ready(function() {
+        var max_fields = 8;
+        var wrapper = $("#tasksContainer");
+        var add_button = $("#appendField");
+
+        var x = document.getElementsByTagName('appdata')['existing_tasks'].getAttribute("content");
+        $(add_button).click(function(e) {
+            e.preventDefault();
+            if (x == 0) {
+                x++;
+                $(wrapper).append(`            <h4>Aufteilung Arbeitszeit</h4>
+            <div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="text" name="hoursTask${x}" placeholder="1.0">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskTask${x}" placeholder="Projekt Zugangssysteme">
+                </div><a href="#" id="delete" class="ui button" style="margin-top: 25px;">Entfernen</a>
+            </div>`);
+            } else if (x < max_fields) {
+                x++;
+                $(wrapper).append(`<div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="text" name="hoursTask${x}" placeholder="1.0">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskTask${x}" placeholder="Projekt Zugangssysteme">
+                </div><a href="#" id="delete" class="ui button" style="margin-top: 25px;">Entfernen</a>
+            </div>`); 
+            } else {
+                alert('Maximale Anzahl Aufteilungen erreicht.')
+            }
+        });
+
+        $(wrapper).on("click", "#delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        })
+    });
+    // code Sample from https://stackoverflow.com/questions/14853779/adding-input-elements-dynamically-to-form
+</script>
+{% endblock %}
+{% block content %}
+<div class="ui container">
+    <h4 class="ui dividing header">Arbeitszeit bearbeiten</h4>
+    <form class="ui form" method="POST" >
+        <div class="field">
+            <label>Datum</label>
+            <input type="date" name="dateAT" value="{{ data.day }}">
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Arbeitszeit Beginn</label>
+                <input type="text" name="beginAT" value="{{ data.getStart() }}">
+            </div>
+            <div class="field">
+                <label>Arbeitszeit Ende</label>
+                <input type="text" name="endAT" value="{{ data.getEnd() }}">
+            </div>
+            <div class="field">
+                <label>Mittag (in Std.)</label>
+                <input type="text" name="lunchAT" value="{{ data.lunch_time }}"">
+            </div>
+        </div>
+        <div class="field">
+            <div class="field">
+                <label>Notizen</label>
+                <textarea rows="2" name="notesAT">{{ data.notes }}</textarea>
+            </div>
+        </div>
+        <div id="tasksContainer">
+        {% if data.tasks %}
+            <h4>Aufteilung Arbeitszeit</h4>
+            {% for task in data.tasks %}
+            <div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="text" name="hoursId{{ task.id }}" value="{{ task.hours }}">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskId{{ task.id }}" value="{{ task.task }}">
+                </div>
+                <a href="{{ url_for('webapp.delete_AT_TASK', id=task.id, atId=data.day) }}" id="deleteTask" class="ui button" style="margin-top: 25px;">Entfernen</a>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+        <button class="ui button" type="button" id="appendField">
+            <i class="plus circle icon"></i>
+            Aufteilung hinzufügen
+        </button>
+        <button class="ui primary button" type="submit" style="float: right;">Aktualisieren</button>
+        <a href="{{ url_for('webapp.delete_AT', id=data.day) }}">
+            <button class="ui red button" type="button" style="float: right;">Löschen</button>
+        </a>
+        <a href="{{ url_for('webapp.view_AM', year=data.day.year, month=data.day.month) }}">
+            <button class="ui button" type="button" style="float: right;">Zurück</button>
+        </a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Notes Tool</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  </head>
+  <body>
+    <div class="ui center alligned container" style="margin-top: 5em;">
+        <h4 class="ui dividing header">Login</h4>
+        <form class="ui form" method="POST" >
+            <div class="field">
+                <label>Access Key</label>
+                <input type="password" name="access_key">
+            </div>
+            <button class="ui primary button" type="submit" style="float: right;">Send</button>
+        </form>
+  </body>
+</html>

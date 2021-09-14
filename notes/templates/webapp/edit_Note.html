@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui container">
+    <h4 class="ui dividing header">Notiz bearbeiten</h4>
+    <form class="ui form" method="POST" >
+        <div class="field">
+            <label>Titel</label>
+            <input type="text" name="title" value="{{ data.title }}">
+        </div>
+        <div class="field">
+            <div class="field">
+                <label>Text</label>
+                <textarea rows="8" name="note">{{ data.note }}</textarea>
+            </div>
+        </div>
+        <button class="ui primary button" type="submit" style="float: right;">Aktualisieren</button>
+        <a href="{{ url_for('webapp.delete_Note', id=data.id) }}">
+            <button class="ui red button" type="button" style="float: right;">Löschen</button>
+        </a>
+        <a href="{{ url_for('webapp.view_Notes') }}">
+            <button class="ui button" type="button" style="float: right;">Zurück</button>
+        </a>
+    </form>
+</div>
+{% endblock %}

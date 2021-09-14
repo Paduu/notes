@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui container">
+    <h4 class="ui dividing header">Notiz erfassen</h4>
+    <form class="ui form" method="POST" >
+        <div class="field">
+            <label>Titel</label>
+            <input type="text" name="title" placeholder="Titel Notiz...">
+        </div>
+        <div class="field">
+            <div class="field">
+                <label>Text</label>
+                <textarea rows="8" name="note"></textarea>
+            </div>
+        </div>
+        <button class="ui primary button" type="submit" style="float: right;">Hinzufügen</button>
+    </form>
+</div>
+{% endblock %}

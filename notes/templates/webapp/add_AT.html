@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var max_fields = 8;
+        var wrapper = $("#tasksContainer");
+        var add_button = $("#appendField");
+
+        var x = 0;
+        $(add_button).click(function(e) {
+            e.preventDefault();
+            if (x == 0) {
+                x++;
+                $(wrapper).append(`            <h4>Aufteilung Arbeitszeit</h4>
+            <div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="text" name="hoursTask${x}" placeholder="1.0">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskTask${x}" placeholder="Projekt Zugangssysteme">
+                </div><a href="#" id="delete" class="ui button" style="margin-top: 25px;">Entfernen</a>
+            </div>`);
+            } else if (x < max_fields) {
+                x++;
+                $(wrapper).append(`<div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="text" name="hoursTask${x}" placeholder="1.0">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskTask${x}" placeholder="Projekt Zugangssysteme">
+                </div><a href="#" id="delete" class="ui button" style="margin-top: 25px;">Entfernen</a>
+            </div>`); 
+            } else {
+                alert('Maximale Anzahl Aufteilungen erreicht.')
+            }
+        });
+
+        $(wrapper).on("click", "#delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        })
+    });
+    // code Sample from https://stackoverflow.com/questions/14853779/adding-input-elements-dynamically-to-form
+</script>
+{% endblock %}
+{% block content %}
+<div class="ui container">
+    <h4 class="ui dividing header">Arbeitszeit erfassen</h4>
+    <form class="ui form" method="POST" >
+        <div class="field">
+            <label>Datum</label>
+            <input type="date" name="dateAT" placeholder="Datum auswählen...">
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Arbeitszeit Beginn</label>
+                <input type="text" name="beginAT" value="08:00">
+            </div>
+            <div class="field">
+                <label>Arbeitszeit Ende</label>
+                <input type="text" name="endAT" value="17:00">
+            </div>
+            <div class="field">
+                <label>Mittag (in Std.)</label>
+                <input type="text" name="lunchAT" value="1.0">
+            </div>
+        </div>
+        <div class="field">
+            <div class="field">
+                <label>Notizen</label>
+                <textarea rows="2" name="notesAT"></textarea>
+            </div>
+        </div>   
+        <div id="tasksContainer">
+            <!-- <h4>Aufteilung Arbeitszeit</h4>
+            <div class="two fields">
+                <div class="field">
+                    <label>Anzahl Std.</label>
+                    <input type="number" name="hoursTask" placeholder="1.0">
+                </div>
+                <div class="field">
+                    <label>Tätigkeit / Projekt</label>
+                    <input type="text" name="taskTask" placeholder="Projekt Zugangssysteme">
+                </div>
+            </div> -->
+        </div>
+        <button class="ui button" type="button" id="appendField">
+            <i class="plus circle icon"></i>
+            Aufteilung hinzufügen
+        </button>
+        <button class="ui primary button" type="submit" style="float: right;">Hinzufügen</button>
+    </form>
+</div>
+{% endblock %}
