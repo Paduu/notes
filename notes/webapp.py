@@ -33,7 +33,7 @@ def login():
     if request.method == 'GET':
         return render_template('webapp/login.html')
     else:
-        if request.form['access_key'] == os.environ.get('APP_ACCESS_KEY'):
+        if request.form['access_key'] == Config.APP_ACCESS_KEY:
             session['logged_in'] = True
             return redirect(url_for('webapp.index'))
         else:
