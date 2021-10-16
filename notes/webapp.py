@@ -228,5 +228,8 @@ def change_Todo():
 @webapp_bp.route('/todo/delete', methods=['POST'])
 @auth_required
 def delete_Todo():
-    print(request.form)
+    for item in request.form:
+        data = Todo.query.filter_by(id=int(item[4:])).first()
+        db.session.delete(data)
+    db.session.commit()
     return redirect(url_for('webapp.view_Todos'))
