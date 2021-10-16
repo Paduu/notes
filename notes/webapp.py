@@ -202,3 +202,31 @@ def delete_Note(id):
     db.session.commit()
     return redirect(url_for('webapp.view_Notes'))
 
+@webapp_bp.route('/todo')
+@auth_required
+def view_Todos():
+    data = Todo.query.all()
+    return render_template('webapp/view_Todos.html', data=data)
+
+@webapp_bp.route('/todo/add', methods=['POST'])
+@auth_required
+def add_Todo():
+        newTodo = Todo(todo=request.form['todo'])
+        db.session.add(newTodo)
+        db.session.commit()
+        return redirect(url_for('webapp.view_Todos'))
+
+@webapp_bp.route('/todo/change', methods=['POST'])
+@auth_required
+def change_Todo():
+    data = Todo.query.filter_by(id=request.form['id']).first()
+    data.done = True if request.form['checked'] == 'true' else False
+    db.session.commit()
+    return redirect(url_for('webapp.view_Todos'))
+
+
+@webapp_bp.route('/todo/delete', methods=['POST'])
+@auth_required
+def delete_Todo():
+    print(request.form)
+    return redirect(url_for('webapp.view_Todos'))

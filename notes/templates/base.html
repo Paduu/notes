@@ -36,6 +36,10 @@
         <i class="plus circle icon"></i>
         Neue Notiz
       </a>
+      <a href="{{ url_for('webapp.view_Todos') }}" class="item">
+        <i class="calendar check icon"></i>
+        Todos
+      </a>
       {% if session['logged_in'] %}
       <div class="right menu">
         <a href="{{ url_for('webapp.logout') }}" class="item">

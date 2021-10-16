@@ -70,4 +70,8 @@ class AM(db.Model):
         self.total_worktime_month = round(self.workdays * self.total_hours_per_day, 1)
         return(None)
 
-
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    todo = db.Column(db.String(255), nullable=False)
+    done = db.Column(db.Boolean, default=False)
+    created = db.Column(db.DateTime, default=datetime.now)

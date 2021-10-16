@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.ui.checkbox')
+            .checkbox()
+        ;
+    });
+    $(function() {
+        $(document).on('change','#todo',function (e) {
+            var todoId = ($(this).attr("value"));
+            var isChecked = ($(this).hasClass("checked"));
+            // alert(isChecked + " " + todoId);
+            $.post( "{{url_for('webapp.change_Todo')}}", { id: todoId, checked: isChecked } );
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<h2 class="ui center aligned header">Todo Liste</h2>
+<div class="ui container">
+    <div class="ui divider"></div>
+    <form class="ui form" method="POST" action="{{ url_for('webapp.add_Todo')}}" >
+        <div class="ui fluid action left icon input">
+            <i class="pencil alternate icon"></i>
+            <input type="text" placeholder="Todo..." name="todo" data-np-checked="1">
+            <button type="submit" class="ui primary button">Hinzufügen</button>
+        </div>
+    </form>
+    <table class="ui padded table">
+        <thead>
+          <tr>
+            <th>Offen</th>
+            <th>Erledigt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="top aligned">
+                <form class="ui form" action="{{ url_for('webapp.delete_Todo') }}" method="POST">
+                    <div class="field">
+                        {% for e in data %}
+                            {% if e.done == False %}
+                            <div class="item">
+                                <div id="todo" value="{{ e.id }}" class="ui checkbox">
+                                    <input name="todo{{ e.id }}" type="checkbox" tabindex="0" class="hidden">
+                                    <label>{{ e.todo }}</label>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <button class="ui right floated bottom attached button" type="submit">Löschen</button>
+                    <a href="{{ url_for('webapp.view_Todos') }}" class="ui right floated bottom attached primary button">Speichern</a>
+                </form>
+            </td>
+            <td class="top aligned">
+                <div class="field">
+                    {% for e in data %}
+                        {% if e.done == True %}
+                        <div class="item" style="color:grey; font-style: italic; ">
+                            <div id="todo" value="{{ e.id }}" class="ui checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" checked>
+                                <label style="text-decoration:line-through; font-style: italic; color:grey;">{{ e.todo }}</label>
+                              </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <button class="ui right floated bottom aligned button" type="submit">Löschen</button>
+                <a href="{{ url_for('webapp.view_Todos') }}" class="ui right floated bottom aligned primary button">Speichern</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+</div>
+{% endblock %}
