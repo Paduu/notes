@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        checkCookie();
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="ui container">
     <h4 class="ui dividing header">Notiz bearbeiten</h4>
@@ -14,7 +22,7 @@
                 <textarea rows="32" name="note">{{ data.note }}</textarea>
             </div>
         </div>
-        <button class="ui primary button" type="submit" style="float: right;">Aktualisieren</button>
+        <button class="ui primary button" onclick="notes_enc();" type="submit" style="float: right;">Aktualisieren</button>
         <a href="{{ url_for('webapp.delete_Note', id=data.id) }}">
             <button class="ui red button" type="button" style="float: right;">Löschen</button>
         </a>

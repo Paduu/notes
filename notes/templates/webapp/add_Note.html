@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        checkCookie();
+    });
+</script>
+{% endblock %}
+
+
 {% block content %}
 <div class="ui container">
     <h4 class="ui dividing header">Notiz erfassen</h4>
@@ -14,7 +23,7 @@
                 <textarea rows="32" name="note"></textarea>
             </div>
         </div>
-        <button class="ui primary button" type="submit" style="float: right;">Hinzufügen</button>
+        <button class="ui primary button" onclick="notes_enc();" type="button" style="float: right;">Hinzufügen</button>
     </form>
 </div>
 {% endblock %}
