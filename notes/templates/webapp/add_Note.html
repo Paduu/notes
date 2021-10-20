@@ -12,7 +12,7 @@
 {% block content %}
 <div class="ui container">
     <h4 class="ui dividing header">Notiz erfassen</h4>
-    <form class="ui form" method="POST" >
+    <form class="ui form" method="POST" onsubmit="return notes_enc()">
         <div class="field">
             <label>Titel</label>
             <input type="text" name="title" placeholder="Titel Notiz...">
@@ -23,7 +23,7 @@
                 <textarea rows="32" name="note"></textarea>
             </div>
         </div>
-        <button class="ui primary button" onclick="notes_enc();" type="button" style="float: right;">Hinzufügen</button>
+        <button class="ui primary button" type="submit" style="float: right;">Hinzufügen</button>
     </form>
 </div>
 {% endblock %}

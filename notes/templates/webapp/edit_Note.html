@@ -11,7 +11,7 @@
 {% block content %}
 <div class="ui container">
     <h4 class="ui dividing header">Notiz bearbeiten</h4>
-    <form class="ui form" method="POST" >
+    <form class="ui form" method="POST" onsubmit="return notes_enc();">
         <div class="field">
             <label>Titel</label>
             <input type="text" name="title" value="{{ data.title }}">
@@ -22,7 +22,7 @@
                 <textarea rows="32" name="note">{{ data.note }}</textarea>
             </div>
         </div>
-        <button class="ui primary button" onclick="notes_enc();" type="submit" style="float: right;">Aktualisieren</button>
+        <button class="ui primary button" type="submit" style="float: right;">Aktualisieren</button>
         <a href="{{ url_for('webapp.delete_Note', id=data.id) }}">
             <button class="ui red button" type="button" style="float: right;">Löschen</button>
         </a>

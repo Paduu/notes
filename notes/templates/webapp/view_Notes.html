@@ -12,7 +12,7 @@
                 <div class="meta">
                     <span class="date">Erstellt am {{ e.created.strftime('%Y-%m-%d') }}</span>
                 </div>
-                <div class="description">{{ e.note[:255] }}</div>
+                <div class="description">{{ e.note[:25]}} {{ e.note[25:50] }}</div>
             </div>
             <div class="extra content">
                 <div class="right floated">
