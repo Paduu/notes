@@ -8,9 +8,9 @@ class Config:
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database/sqlite.db'
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///database/sqlite.db'
     # updated to used MariaDB:
-    #SQLALCHEMY_DATABASE_URI = os.environ.get('JAWSDB_MARIA_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('JAWSDB_MARIA_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # WebApp Settings
