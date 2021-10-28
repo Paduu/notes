@@ -1,16 +1,9 @@
 README.md
 setup.py
-<<<<<<< HEAD
 notes/__init__.py
 notes/config.py
 notes/models.py
 notes/webapp.py
-=======
-arbeitszeit/__init__.py
-arbeitszeit/arbeitszeit.py
-arbeitszeit/config.py
-arbeitszeit/webapp.py
->>>>>>> extra
 notes.egg-info/PKG-INFO
 notes.egg-info/SOURCES.txt
 notes.egg-info/dependency_links.txt

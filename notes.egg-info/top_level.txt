@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 notes
-=======
-arbeitszeit
->>>>>>> extra

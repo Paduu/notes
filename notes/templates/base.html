@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <script src="{{ url_for('static', filename='aes.js') }}"></script>
     <script src="{{ url_for('static', filename='notes.js') }}"></script>
- 
+
     {% block header %}{% endblock %}
   </head>
   <body>
@@ -45,6 +45,14 @@
       </a>
       {% if session['logged_in'] %}
       <div class="right menu">
+        <a href="" onclick="delete_cookie();" class="item" id="deleteKey" style="display: none;">
+          <i class="lock icon"></i>
+          Remove Key
+        </a>
+        <a href="" onclick="set_cookie();" class="item" id="addKey" style="display: none;">
+          <i class="unlock icon"></i>
+          Add Key
+        </a>
         <a href="{{ url_for('webapp.logout') }}" class="item">
           <i class="sign out alternate icon"></i>
           Logout

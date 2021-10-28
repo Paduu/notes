@@ -10,6 +10,12 @@ function set_cookie() {
     location.reload();
 }
 
+function delete_cookie() {
+    var cookieName = 'notescookie';
+    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload();
+}
+
 function notes_dec () {
     var noteskey = window.atob(document.cookie.split("=")[1])
     var noteenc = window.atob(document.getElementsByName("note")[0].value);
@@ -26,12 +32,12 @@ function notes_enc () {
     
 }
 
-
 function checkCookie () {
     var notescookie = document.cookie;
     if (notescookie) {
+        document.getElementById("deleteKey").style.display = "block";
         notes_dec();
     } else {
-        set_cookie();
+        document.getElementById("addKey").style.display = "block";
     }
 }

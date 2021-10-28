@@ -13,5 +13,6 @@ setup(
         'Flask-HTTPAuth',
         'flask-wtf',
         'email_validator',
+        'python-dateutil'
     ],
 )
