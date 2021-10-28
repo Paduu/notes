@@ -6,7 +6,7 @@ function set_cookie() {
     var passenc = window.btoa(passin);
     var cookieName = 'notescookie';
     var cookieValue = passenc ;
-    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + ";domain=herokuapp.com; path=/;";
+    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + ";domain=notes-python.herokuapp.com; path=/;";
     location.reload();
 }
 
