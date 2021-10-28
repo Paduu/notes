@@ -12,7 +12,6 @@ setup(
         'flask-restful',
         'Flask-HTTPAuth',
         'flask-wtf',
-        'email_validator',
-        'python-dateutil'
+        'email_validator'
     ],
 )
