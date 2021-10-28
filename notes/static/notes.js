@@ -6,13 +6,13 @@ function set_cookie() {
     var passenc = window.btoa(passin);
     var cookieName = 'notescookie';
     var cookieValue = passenc ;
-    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + ";domain=notes-python.herokuapp.com;path=/; SameSite=None; Secure";
+    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + ";domain=notes-python.herokuapp.com; SameSite=None; Secure";
     location.reload();
 }
 
 function delete_cookie() {
     var cookieName = 'notescookie';
-    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; Secure";
     location.reload();
 }
 
