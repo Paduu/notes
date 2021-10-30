@@ -15,6 +15,17 @@
     <script src="{{ url_for('static', filename='aes.js') }}"></script>
     <script src="{{ url_for('static', filename='notes.js') }}"></script>
 
+    <style>
+      #enc-dialog {
+          display: none;
+          position: fixed;
+          left: 50%;
+          top: 10%;
+          z-index: 99999;
+          min-width: 30%;
+      }
+    </style>
+
     {% block header %}{% endblock %}
   </head>
   <body>
@@ -45,11 +56,12 @@
       </a>
       {% if session['logged_in'] %}
       <div class="right menu">
-        <a href="" onclick="delete_cookie();" class="item" id="deleteKey" style="display: none;">
+        <a onclick="delete_cookie();" class="item" id="deleteKey" style="display: none;">
           <i class="lock icon"></i>
           Remove Key
         </a>
-        <a href="" onclick="set_cookie();" class="item" id="addKey" style="display: none;">
+        <!-- <a href="" onclick="set_cookie();" class="item" id="addKey" style="display: none;"> -->
+        <a onclick="$('#enc-dialog').fadeIn(200);" class="item" id="addKey" style="display: none;">
           <i class="unlock icon"></i>
           Add Key
         </a>
@@ -59,6 +71,17 @@
         </a>
       </div>
       {% endif %}
+    </div>
+    <div id="enc-dialog" class="ui padded segment">
+      <form class="ui form" onsubmit="set_cookie();" method="POST" action="javascript:void(0);">
+        <div class="field">
+            <label>Password</label>
+            <input type="password" id="enc_key" name="enc_key" placeholder="Insert Key" value=""></input>
+          </label>
+        </div>
+        <button type="submit" class="ui right floated primary button">Add</button>
+        <button type="button" onclick="$('#enc-dialog').fadeOut(200);" class="ui right floated button">Cancel</button>
+      </form>
     </div>
     <div class="ui grid buffer" style="height:3em;"></div>
     {% block content %}{% endblock %}

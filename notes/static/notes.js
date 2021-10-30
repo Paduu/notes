@@ -1,19 +1,21 @@
 function set_cookie() {
-    passin = prompt("Please enter the Key: ");
+    passin = document.getElementsByName("enc_key")[0].value
     var myDate = new Date();
     myDate.setDate(myDate.getDate() + 1);
     myDate.setHours(09,0,0,0);
     var passenc = window.btoa(passin);
     var cookieName = 'notescookie';
     var cookieValue = passenc ;
-    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=notes-python.herokuapp.com; path=/;";
-    location.reload();
+    //document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=notes-python.herokuapp.com; path=/;";
+    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=localhost; path=/;";
+    location.reload(true);
 }
 
 function delete_cookie() {
     var cookieName = 'notescookie';
-    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=notes-python.herokuapp.com; path=/;";
-    location.reload();
+    //document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=notes-python.herokuapp.com; path=/;";
+    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=localhost; path=/;";
+    location.reload(true);
 }
 
 function notes_dec () {
@@ -41,3 +43,5 @@ function checkCookie () {
         document.getElementById("addKey").style.display = "block";
     }
 }
+
+
