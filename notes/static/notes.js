@@ -6,15 +6,13 @@ function set_cookie() {
     var passenc = window.btoa(passin);
     var cookieName = 'notescookie';
     var cookieValue = passenc ;
-    //document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=notes-python.herokuapp.com; path=/;";
-    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=localhost; path=/;";
+    document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate + "; domain=notes-python.herokuapp.com; path=/;";
     location.reload(true);
 }
 
 function delete_cookie() {
     var cookieName = 'notescookie';
-    //document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=notes-python.herokuapp.com; path=/;";
-    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=localhost; path=/;";
+    document.cookie = cookieName +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=notes-python.herokuapp.com; path=/;";
     location.reload(true);
 }
 
