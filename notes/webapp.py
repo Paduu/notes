@@ -21,7 +21,7 @@ webapp_bp = Blueprint('webapp', __name__, url_prefix='/webapp')
 
 @webapp_bp.before_request
 def force_https():
-    if request.endpoint in webapp_bp.view_functions and not request.is_secure:
+    if request.url.startswith('http://'):
         return redirect(request.url.replace('http://', 'https://'))
 
 def auth_required(f):
