@@ -28,4 +28,9 @@ def create_app():
         def root():
             return redirect(url_for('webapp.index'))
 
+        # close db sessions
+        @app.teardown_appcontext
+        def shutdown_session(exception=None):
+            db.close_all_sessions()
+
         return app

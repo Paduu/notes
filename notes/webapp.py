@@ -19,6 +19,8 @@ import os
 
 webapp_bp = Blueprint('webapp', __name__, url_prefix='/webapp')
 
+
+#uncomment for prod, only accept https
 @webapp_bp.before_request
 def force_https():
     if request.url.startswith('http://'):
