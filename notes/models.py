@@ -1,21 +1,25 @@
 """Database models"""
-from . import db
 from datetime import datetime, date
 from calendar import Calendar
+from sqlalchemy import Column, Integer, String, Text, Date, DateTime, Float, Boolean, ForeignKey
+from sqlalchemy.orm import relationship, backref
+from .database import Base
 
-class Notes(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
-    note = db.Column(db.Text)
-    created = db.Column(db.DateTime, default=datetime.now)
+class Notes(Base):
+    __tablename__ = 'notes'
+    id = Column(Integer, primary_key=True)
+    title = Column(String(255), nullable=False)
+    note = Column(Text)
+    created = Column(DateTime, default=datetime.now)
 
-class AT(db.Model):
-    day = db.Column(db.Date, primary_key=True)
-    lunch_time = db.Column(db.Float, nullable=False)
-    start = db.Column(db.DateTime, nullable=False)
-    end = db.Column(db.DateTime, nullable=False)
-    notes = db.Column(db.Text)
-    tasks =  db.relationship('AT_TASK', backref=db.backref('at', lazy=True), cascade="all, delete")
+class AT(Base):
+    __tablename__ = 'AT'
+    day = Column(Date, primary_key=True)
+    lunch_time = Column(Float, nullable=False)
+    start = Column(DateTime, nullable=False)
+    end = Column(DateTime, nullable=False)
+    notes = Column(Text)
+    tasks =  relationship('AT_TASK', backref=backref('at', lazy=True), cascade="all, delete")
 
     def __repr__(self):
         return('arbeitszeit.AT({0})'.format(self.day))
@@ -41,21 +45,23 @@ class AT(db.Model):
         # set a new date
         self.day = date(int(year), int(month), int(day))
 
-class AT_TASK(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    hours = db.Column(db.Float, nullable=False)
-    task = db.Column(db.String(255), nullable=False)
-    at_day = db.Column(db.Date, db.ForeignKey('AT.day'), nullable=False)
+class AT_TASK(Base):
+    __tablename__ = 'AT_TASK'
+    id = Column(Integer, primary_key=True)
+    hours = Column(Float, nullable=False)
+    task = Column(String(255), nullable=False)
+    at_day = Column(Date, ForeignKey('AT.day'), nullable=False)
 
-class AM(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    year = db.Column(db.Integer, nullable=False)
-    month = db.Column(db.Integer, nullable=False)
-    hours_per_day = db.Column(db.Float, nullable=False)
-    work_percentage = db.Column(db.Float, nullable=False)
-    workdays = db.Column(db.Integer, nullable=False)
-    total_hours_per_day = db.Column(db.Float, nullable=False)
-    total_worktime_month = db.Column(db.Float, nullable=False)
+class AM(Base):
+    __tablename__ = 'AM'
+    id = Column(Integer, primary_key=True)
+    year = Column(Integer, nullable=False)
+    month = Column(Integer, nullable=False)
+    hours_per_day = Column(Float, nullable=False)
+    work_percentage = Column(Float, nullable=False)
+    workdays = Column(Integer, nullable=False)
+    total_hours_per_day = Column(Float, nullable=False)
+    total_worktime_month = Column(Float, nullable=False)
 
     def __repr__(self):
         return('arbeitszeit.AM({0}, {1})'.format(self.year, self.month))
@@ -70,8 +76,9 @@ class AM(db.Model):
         self.total_worktime_month = round(self.workdays * self.total_hours_per_day, 1)
         return(None)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    todo = db.Column(db.String(255), nullable=False)
-    done = db.Column(db.Boolean, default=False)
-    created = db.Column(db.DateTime, default=datetime.now)
+class Todo(Base):
+    __tablename__ = 'todo'
+    id = Column(Integer, primary_key=True)
+    todo = Column(String(255), nullable=False)
+    done = Column(Boolean, default=False)
+    created = Column(DateTime, default=datetime.now)

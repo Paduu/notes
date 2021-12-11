@@ -3,22 +3,18 @@ from flask import (
     render_template,
     request,
     redirect,
-    current_app,
-    flash,
     session,
     url_for,
 )
-
-from .models import *
-from .config import Config
 from datetime import date
 from dateutil import relativedelta
 from sqlalchemy import extract
 from functools import wraps
-import os
+from .models import *
+from .config import Config
+from .database import db_session
 
 webapp_bp = Blueprint('webapp', __name__, url_prefix='/webapp')
-
 
 #uncomment for prod, only accept https
 @webapp_bp.before_request
@@ -75,8 +71,8 @@ def view_AM(year, month):
         am.hours_per_day = Config.APP_WORKDAY_HOURS
         am.work_percentage = Config.APP_WORK_PERCENTAGE
         am.calc()
-        db.session.add(am)
-        db.session.commit()
+        db_session.add(am)
+        db_session.commit()
     data =  AT.query.filter(extract('month', AT.day) == d.month, extract('year', AT.day) == d.year).order_by(AT.day).all()
     total = sum([e.calc() for e in data])
     mprev = d - relativedelta.relativedelta(months=1)
@@ -98,7 +94,7 @@ def add_AT():
         data.updateEnd(request.form['endAT'])
         data.lunch_time = float(request.form['lunchAT'])
         data.notes = request.form['notesAT']
-        db.session.add(data)
+        db_session.add(data)
         # add tasks
         tasks = [(request.form.get('hoursTask{0}'.format(x)),
                 request.form.get('taskTask{0}'.format(x))) for x in range(1,9)]
@@ -108,8 +104,8 @@ def add_AT():
                 t.hours = float(task[0])
                 t.task = task[1]
                 t.at = data
-                db.session.add(t)
-        db.session.commit()
+                db_session.add(t)
+        db_session.commit()
         return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/edit/<id>',  methods=['POST', 'GET'])
@@ -138,8 +134,8 @@ def edit_AT(id):
                 t.hours = float(task[0])
                 t.task = task[1]
                 t.at = data
-                db.session.add(t)
-        db.session.commit()
+                db_session.add(t)
+        db_session.commit()
         return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/config/<year>/<month>',  methods=['POST', 'GET'])
@@ -152,23 +148,23 @@ def edit_AM(year, month):
         am.hours_per_day = float(request.form['hpdAM'])
         am.work_percentage = float(request.form['wpAM']) / 100
         am.calc()
-        db.session.commit()
+        db_session.commit()
         return redirect(url_for('webapp.view_AM', year=am.year, month=am.month))
 
 @webapp_bp.route('/arbeitszeit/delete/<id>')
 @auth_required
 def delete_AT(id):
     data = AT.query.filter_by(day=id).first()
-    db.session.delete(data)
-    db.session.commit()
+    db_session.delete(data)
+    db_session.commit()
     return redirect(url_for('webapp.view_AM', year=data.day.year, month=data.day.month))
 
 @webapp_bp.route('/arbeitszeit/task/delete/<id>')
 @auth_required
 def delete_AT_TASK(id):
     data = AT_TASK.query.filter_by(id=id).first()
-    db.session.delete(data)
-    db.session.commit()
+    db_session.delete(data)
+    db_session.commit()
     return redirect(url_for('webapp.edit_AT', id=request.args.get('atId')))
 
 
@@ -185,8 +181,8 @@ def add_Note():
         return render_template('webapp/add_Note.html')
     else:
         newNote = Notes(title=request.form['title'], note=request.form['note'])
-        db.session.add(newNote)
-        db.session.commit()
+        db_session.add(newNote)
+        db_session.commit()
         return redirect(url_for('webapp.view_Notes'))
 
 @webapp_bp.route('/notes/edit/<id>', methods=['POST', 'GET'])
@@ -198,15 +194,15 @@ def edit_Note(id):
     else:
         data.title = request.form['title']
         data.note = request.form['note']
-        db.session.commit()
+        db_session.commit()
         return redirect(url_for('webapp.view_Notes'))
 
 @webapp_bp.route('/notes/delete/<id>')
 @auth_required
 def delete_Note(id):
     data = Notes.query.filter_by(id=id).first()
-    db.session.delete(data)
-    db.session.commit()
+    db_session.delete(data)
+    db_session.commit()
     return redirect(url_for('webapp.view_Notes'))
 
 @webapp_bp.route('/todo')
@@ -219,8 +215,8 @@ def view_Todos():
 @auth_required
 def add_Todo():
         newTodo = Todo(todo=request.form['todo'])
-        db.session.add(newTodo)
-        db.session.commit()
+        db_session.add(newTodo)
+        db_session.commit()
         return redirect(url_for('webapp.view_Todos'))
 
 @webapp_bp.route('/todo/change', methods=['POST'])
@@ -228,7 +224,7 @@ def add_Todo():
 def change_Todo():
     data = Todo.query.filter_by(id=request.form['id']).first()
     data.done = True if request.form['checked'] == 'true' else False
-    db.session.commit()
+    db_session.commit()
     return redirect(url_for('webapp.view_Todos'))
 
 
@@ -237,6 +233,6 @@ def change_Todo():
 def delete_Todo():
     for item in request.form:
         data = Todo.query.filter_by(id=int(item[4:])).first()
-        db.session.delete(data)
-    db.session.commit()
+        db_session.delete(data)
+    db_session.commit()
     return redirect(url_for('webapp.view_Todos'))

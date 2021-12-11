@@ -1,18 +1,13 @@
 from flask import Flask, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from . import config
-
-db = SQLAlchemy()
+from .config import Config
+from .database import init_db, db_session
 
 def create_app():
     """Construct the core app object."""
     app = Flask(__name__)
 
     # Configuration
-    app.config.from_object(config.Config)
-
-    # Init SQLAlchemy
-    db.init_app(app)
+    app.config.from_object(Config)
 
     with app.app_context():
         from . import webapp
@@ -20,8 +15,7 @@ def create_app():
         # Register Blueprints
         app.register_blueprint(webapp.webapp_bp)
 
-        # Create DB
-        db.create_all()
+        init_db()
 
         # Route the root location
         @app.route('/')
@@ -31,6 +25,6 @@ def create_app():
         # close db sessions
         @app.teardown_appcontext
         def shutdown_session(exception=None):
-            db.close_all_sessions()
+            db_session.remove()
 
         return app
